@@ -5,9 +5,9 @@ using namespace std;
 /*************** String manipulation ****************/
 
 // Split string into tokens by the given delimit char                          
-vector_string split(const string &s, char delim)
+VectorOfString Split(const String &s, char delim)
 {
-  vector<string> elems;
+  vector<String> elems;
 
   split(s, delim, elems);
 
@@ -15,10 +15,10 @@ vector_string split(const string &s, char delim)
 }
 
 // Overload: Split string into tokens by the given delimit char                    
-vector_string &split(const string &s, char delim, vector_string &elems)
+VectorOfString &Split(const String &s, char delim, VectorOfString &elems)
 {
   stringstream ss(s);
-  string item;
+  String item;
 
   while (getline(ss, item, delim))
   {
@@ -29,14 +29,14 @@ vector_string &split(const string &s, char delim, vector_string &elems)
 }
 
 // Replace all instances of "from" to "to" in the string str
-void replace_all(string& str, string from, string to) 
+void ReplaceAll(String& str, String from, String to) 
 {  
     if (from.empty())
         return;
 
     size_t start_pos = 0;
 
-    while ((start_pos = str.find(from, start_pos)) != string::npos) 
+    while ((start_pos = str.find(from, start_pos)) != String::npos) 
     {
         str.replace(start_pos, from.length(), to);
         start_pos += to.length(); // In case 'to' contains 'from', like replacing 'x' with 'yx'
@@ -46,15 +46,15 @@ void replace_all(string& str, string from, string to)
 /*************** File I/O ****************/
 
 // For a standard filename with ".xxx" extension, remove the extension
-string remove_extension(const string filename)
+String RemoveExtension(const String filename)
 {
-  string filename_no_extension = filename.substr(0, filename.rfind("."));
+  String filename_no_extension = filename.substr(0, filename.rfind("."));
 
   return filename_no_extension;
 }
 
 // Read a delimited text file into a map; the first element in the line becomes the key
-void read_delimited_file_to_map(map<string, vector_string> &content, const string filename, const char delimit, bool to_skip_header)
+void ReadDelimitedFileToMap(map<String, VectorOfString> &content, const String filename, const char delimit, bool to_skip_header)
 {
   ifstream input_file;
 
@@ -66,7 +66,7 @@ void read_delimited_file_to_map(map<string, vector_string> &content, const strin
     exit(EXIT_FAILURE);
   }
 
-  string line;
+  String line;
 
   getline(input_file, line);
   
@@ -82,8 +82,8 @@ void read_delimited_file_to_map(map<string, vector_string> &content, const strin
 
   while (input_file.good())
   {
-    vector_string fields = split(line, delimit);
-    vector_string values;
+    VectorOfString fields = split(line, delimit);
+    VectorOfString values;
 
     for (int i = 1; i < fields.size(); i++)
     {
@@ -100,7 +100,7 @@ void read_delimited_file_to_map(map<string, vector_string> &content, const strin
 }
 
 // Read a delimited text file into a vector; each line becomes an element of vector<string> in the vector
-void read_delimited_file_to_vector(vector<vector<string> > &content, const string filename, const char delimit, bool to_skip_header)
+void ReadDelimitedFileToVector(vector<vector<String> > &content, const String filename, const char delimit, bool to_skip_header)
 {
   ifstream input_file;
 
@@ -112,7 +112,7 @@ void read_delimited_file_to_vector(vector<vector<string> > &content, const strin
     exit(EXIT_FAILURE);
   }
 
-  string line;
+  String line;
   
   // Skip the file header
   if (to_skip_header)
@@ -125,7 +125,7 @@ void read_delimited_file_to_vector(vector<vector<string> > &content, const strin
   while (input_file.good())
   {
     std::transform(line.begin(), line.end(), line.begin(), ::tolower);
-    vector_string fields = split(line, delimit);
+    VectorOfString fields = split(line, delimit);
     content.push_back(fields);
     getline(input_file, line);
   } 
@@ -138,26 +138,26 @@ void read_delimited_file_to_vector(vector<vector<string> > &content, const strin
 
 
 // Convert a string into float
-float convert_string_to_float(const string number_string)
+float ConvertStringToFloat(const String number_string)
 {
   return atof(number_string.c_str());
 }
 
 // Convert a string into int
-int convert_string_to_int(const string number_string)
+int ConvertStringToInt(const String number_string)
 {
   return atoi(number_string.c_str());
 }
 
 // Convert a number into string
-string convert_number_to_string(const int number)
+String ConvertNumberToString(const int number)
 {
   stringstream ss;
   ss << number;
   return ss.str();
 }
 
-string convert_number_to_string(const float number)
+String ConvertNumberToString(const float number)
 {
   stringstream ss;
   ss << number;
@@ -167,9 +167,9 @@ string convert_number_to_string(const float number)
 /*************** Date and Time ****************/
 
 // Parse the date string (YYYY-MM-DD) into a vector of int [YYYY, MM, DD]
-vector<int> parse_date(const string date)
+vector<int> ParseDate(const String date)
 {
-  vector_string yyyy_mm_dd = split(date, '-');
+  VectorOfString yyyy_mm_dd = split(date, '-');
 
   if (yyyy_mm_dd.size() != 3)
   {
@@ -187,7 +187,7 @@ vector<int> parse_date(const string date)
 
 // Convert a date in string (YYYY-MM-DD) into the Julian Date Number
 // Refer to http://en.wikipedia.org/wiki/Julian_day
-long convert_date_to_jdn(const string date)
+long ConvertDateToJDN(const String date)
 {
   vector<int> y_m_d = parse_date(date);
  
@@ -203,7 +203,7 @@ long convert_date_to_jdn(const string date)
 
 // Convert a Julian Date Number into a date string (YYYY-MM-DD)
 // Refer to http://en.wikipedia.org/wiki/Julian_day
-string convert_jdn_to_date(const long jdn)
+String ConvertJDNToDate(const long jdn)
 {
 
   long long j = static_cast<long long>(jdn + 0.5) + 32044;
@@ -223,9 +223,9 @@ string convert_jdn_to_date(const long jdn)
   int month = (m + 2) % 12 + 1;
   int day = d + 1;
 
-  string year_str = convert_number_to_string(year);
-  string month_str = convert_number_to_string(month);
-  string day_str = convert_number_to_string(day);
+  String year_str = convert_number_to_string(year);
+  String month_str = convert_number_to_string(month);
+  String day_str = convert_number_to_string(day);
 
   // Pad the month and day string with leading 0s
   month_str.insert(month_str.begin(), 2 - month_str.size(), '0');
@@ -235,7 +235,7 @@ string convert_jdn_to_date(const long jdn)
 }
 
 // Return the date (YYYY-MM-DD) that is days_diff ahead (-) of or after (+) today (YYYY-MM-DD)
-string get_diff_date(const string today, int days_diff)
+String GetDiffDate(const String today, int days_diff)
 {
   long jdn = convert_date_to_jdn(today);
 
