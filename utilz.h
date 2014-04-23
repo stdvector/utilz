@@ -14,6 +14,8 @@ typedef std::vector<String> VectorOfString;
 typedef std::vector<float> VectorOfFloat;
 typedef std::vector<int> VectorOfInt;
 
+using namespace std;
+
 /*************** String manipulation ****************/
 
 // Split string into tokens by the given delimit char                          
@@ -40,6 +42,9 @@ void ReadDelimitedFileToVector(vector<VectorOfString> &content, const String fil
 
 // Convert a string into float
 float ConvertStringToFloat(const String number_string);
+
+// Convert a string into double
+double ConvertStringToDouble(const String number_string);
 
 // Convert a string into int
 int ConvertStringToInt(const String number_string);

@@ -9,7 +9,7 @@ VectorOfString Split(const String &s, char delim)
 {
   vector<String> elems;
 
-  split(s, delim, elems);
+  Split(s, delim, elems);
 
   return elems;
 }
@@ -75,14 +75,14 @@ void ReadDelimitedFileToMap(map<String, VectorOfString> &content, const String f
   {
     std::transform(line.begin(), line.end(), line.begin(), ::tolower);
 
-    content["_header"] = split(line, delimit);
+    content["_header"] = Split(line, delimit);
   }
 
   getline(input_file, line);
 
   while (input_file.good())
   {
-    VectorOfString fields = split(line, delimit);
+    VectorOfString fields = Split(line, delimit);
     VectorOfString values;
 
     for (int i = 1; i < fields.size(); i++)
@@ -125,7 +125,7 @@ void ReadDelimitedFileToVector(vector<vector<String> > &content, const String fi
   while (input_file.good())
   {
     std::transform(line.begin(), line.end(), line.begin(), ::tolower);
-    VectorOfString fields = split(line, delimit);
+    VectorOfString fields = Split(line, delimit);
     content.push_back(fields);
     getline(input_file, line);
   } 
@@ -139,6 +139,12 @@ void ReadDelimitedFileToVector(vector<vector<String> > &content, const String fi
 
 // Convert a string into float
 float ConvertStringToFloat(const String number_string)
+{
+  return atof(number_string.c_str());
+}
+
+// Convert a string into double
+double ConvertStringToDouble(const String number_string)
 {
   return atof(number_string.c_str());
 }
@@ -169,7 +175,7 @@ String ConvertNumberToString(const float number)
 // Parse the date string (YYYY-MM-DD) into a vector of int [YYYY, MM, DD]
 vector<int> ParseDate(const String date)
 {
-  VectorOfString yyyy_mm_dd = split(date, '-');
+  VectorOfString yyyy_mm_dd = Split(date, '-');
 
   if (yyyy_mm_dd.size() != 3)
   {
@@ -178,9 +184,9 @@ vector<int> ParseDate(const String date)
   }
 
   vector<int> y_m_d;
-  y_m_d.push_back(convert_string_to_int(yyyy_mm_dd[0]));
-  y_m_d.push_back(convert_string_to_int(yyyy_mm_dd[1]));
-  y_m_d.push_back(convert_string_to_int(yyyy_mm_dd[2]));
+  y_m_d.push_back(ConvertStringToInt(yyyy_mm_dd[0]));
+  y_m_d.push_back(ConvertStringToInt(yyyy_mm_dd[1]));
+  y_m_d.push_back(ConvertStringToInt(yyyy_mm_dd[2]));
 
   return (y_m_d);
 }
@@ -189,7 +195,7 @@ vector<int> ParseDate(const String date)
 // Refer to http://en.wikipedia.org/wiki/Julian_day
 long ConvertDateToJDN(const String date)
 {
-  vector<int> y_m_d = parse_date(date);
+  vector<int> y_m_d = ParseDate(date);
  
   int a = (14 - y_m_d[1]) / 12; 
   int y = y_m_d[0] + 4800 - a; 
@@ -223,9 +229,9 @@ String ConvertJDNToDate(const long jdn)
   int month = (m + 2) % 12 + 1;
   int day = d + 1;
 
-  String year_str = convert_number_to_string(year);
-  String month_str = convert_number_to_string(month);
-  String day_str = convert_number_to_string(day);
+  String year_str = ConvertNumberToString(year);
+  String month_str = ConvertNumberToString(month);
+  String day_str = ConvertNumberToString(day);
 
   // Pad the month and day string with leading 0s
   month_str.insert(month_str.begin(), 2 - month_str.size(), '0');
@@ -237,9 +243,9 @@ String ConvertJDNToDate(const long jdn)
 // Return the date (YYYY-MM-DD) that is days_diff ahead (-) of or after (+) today (YYYY-MM-DD)
 String GetDiffDate(const String today, int days_diff)
 {
-  long jdn = convert_date_to_jdn(today);
+  long jdn = ConvertDateToJDN(today);
 
-  return (convert_jdn_to_date(jdn + days_diff));
+  return (ConvertJDNToDate(jdn + days_diff));
 }
 
 //////////////////////// TEST ////////////////
